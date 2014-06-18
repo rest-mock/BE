@@ -1,6 +1,6 @@
 var APP_CONFIG = require('../../config/app-config');
 var data = require( APP_CONFIG.DATA_PATH );
-var RESTMock = require('../bower_components/rest-mock').init(data);
+var RESTMock = require('rest-mock').init(data);
 var Q = require('q');
 var fs = require('fs');
 var path = require('path');

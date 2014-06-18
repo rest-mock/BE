@@ -5,8 +5,5 @@
     "**/.*",
     "node_modules",
     "components"
-  ],
-  "dependencies": {
-    "rest-mock": "git@github.com:rest-mock/rest-mock.git"
-  }
+  ]
 }
