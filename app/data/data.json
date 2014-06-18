@@ -1,0 +1,56 @@
+{
+    "services": [
+        {
+            "id": "312312312312",
+            "name": "Colors",
+            "path": "/colors",
+            "mode": "static",
+            "responses": {
+                "get": [
+                    {
+                        "name": "Valid colors",
+                        "active": true,
+                        "response": "{\"colors\": [\"green\", \"orange\"]}"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "3424234234234",
+            "name": "Color details",
+            "path": "/colors/:colorId",
+            "mode": "dynamic",
+            "params": {
+                "colorId": "alpha",
+                "other": "letter",
+                "another": "/regexp/"
+            },
+            "responses": {
+                "get": [
+                    {
+                        "name": "Color orange",
+                        "active": true,
+                        "params": [
+                            {
+                                "key": "colorId",
+                                "value": "orange"
+                            }
+                        ],
+                        "response": "{\"description\": \"awesome color\"}"
+                    },
+                    {
+                        "name": "Color green",
+                        "active": true,
+                        "params": [
+                            {
+                                "key": "colorId",
+                                "value": "green"
+                            }
+                        ],
+                        "response": "{\"description\": \"i like it too\"}"
+                    }
+                ]
+            }
+        }
+    ]
+}
