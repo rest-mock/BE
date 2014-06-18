@@ -12,12 +12,18 @@ module.exports = function(servicePath, method, query){
         this.method = method;
         this.query = query;
     }
-    console.log(servicePath);
+    
     if( typeof servicePath === 'object' ){
+        var params = {};
+        _.each(servicePath.rawParams, function(rawParam){
+            params[ rawParam.name ] = rawParam.type !== 'regexp' ? rawParam.type : rawParam.value;
+        });
+
         this.path = servicePath.path;
         this.name = servicePath.name;
         this.mode = servicePath.mode;
         this.id = new Date().getTime().toString();
+        this.params = params;
     }
 
     this.getResponse = function(){
@@ -65,6 +71,7 @@ module.exports = function(servicePath, method, query){
             name: this.name,
             mode: this.mode,
             path: this.path,
+            params: this.params,
             responses: []
         });
 

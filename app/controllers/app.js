@@ -36,7 +36,8 @@ exports.addService = function(req, res){
     var params = {
         name: body.name,
         path: body.path.slice(0,1) !== '/' ? '/'+body.path : body.path,
-        mode: body.mode
+        mode: body.mode,
+        rawParams: body.params
     };
 
     var service = new Service(params);
