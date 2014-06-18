@@ -72,7 +72,7 @@ module.exports = function(servicePath, method, query){
             mode: this.mode,
             path: this.path,
             params: this.params,
-            responses: []
+            responses: {}
         });
 
         try{

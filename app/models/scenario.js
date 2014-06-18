@@ -1,3 +1,5 @@
+'use strict';
+
 var APP_CONFIG = require('../../config/app-config');
 var data = require( APP_CONFIG.DATA_PATH );
 var RESTMock = require('rest-mock').init(data);
@@ -7,16 +9,24 @@ var path = require('path');
 var _ = require('underscore');
 
 module.exports = function(params){
+    var scenarioParams = _.map(params.rawParams, function(rawParam){
+        return {
+            key: rawParam.name,
+            value: rawParam.value
+        };
+    });
+
     this.serviceId = params.service;
     this.name = params.name;
     this.method = params.method;
     this.response = params.response;
     this.id = new Date().getTime().toString();
+    this.params = scenarioParams;
 
     // TODO: Handle the case when the sercice doesn exists
-    this.getService = function(){
-        return _.findWhere(data.services, {id: this.serviceId});
-    };
+    // this.getService = function(){
+    //     return _.findWhere(data.services, {id: this.serviceId});
+    // };
 
     this.save = function(){
         var deferred = Q.defer();
@@ -29,7 +39,6 @@ module.exports = function(params){
                 serviceIndex = index;
             }
         }, this);
-
         if( !data.services[serviceIndex] ){
             deferred.reject([
                 {
@@ -46,6 +55,7 @@ module.exports = function(params){
         data.services[serviceIndex].responses[this.method].push({
             id: this.id,
             name: this.name,
+            params: this.params,
             response: this.response
         });
 

@@ -21,7 +21,7 @@ exports.getServices = function(req, res){
 
     var services = _.map(data.services, function(service){
         if( !serviceId || serviceId === service.id ){
-            return _.pick(service, 'id', 'name', 'responses');
+            return _.pick(service, 'id', 'name', 'responses', 'params');
         }
 
         return null;
@@ -69,7 +69,8 @@ exports.addScenario = function(req, res){
         service: body.service,
         name: body.name,
         method: body.method,
-        response: body.response
+        response: body.response,
+        rawParams: body.params
     };
 
     var scenario = new Scenario(params);
