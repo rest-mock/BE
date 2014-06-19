@@ -27,7 +27,10 @@ exports.getServices = function(req, res){
         return null;
     });
 
-    res.json(_.compact(services));
+    services = _.compact(services);
+    var response = ( services.length === 1 ) ? services[0] : services;
+
+    res.json( response );
 };
 
 exports.addService = function(req, res){
