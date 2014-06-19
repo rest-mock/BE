@@ -14,16 +14,13 @@ module.exports = function(servicePath, method, query){
     }
     
     if( typeof servicePath === 'object' ){
-        var params = {};
-        _.each(servicePath.rawParams, function(rawParam){
-            params[ rawParam.name ] = rawParam.type !== 'regexp' ? rawParam.type : rawParam.value;
-        });
-
         this.path = servicePath.path;
         this.name = servicePath.name;
         this.mode = servicePath.mode;
         this.id = new Date().getTime().toString();
-        this.params = params;
+        this.params = _.map(servicePath.rawParams, function(rawParam){
+            return _.pick(rawParam, 'type', 'key');
+        });
     }
 
     this.getResponse = function(){
