@@ -27,7 +27,7 @@ exports.getServices = function(req, res){
         return null;
     });
 
-    res.json({services: _.compact(services)});
+    res.json(_.compact(services));
 };
 
 exports.addService = function(req, res){
