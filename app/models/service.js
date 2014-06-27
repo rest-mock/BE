@@ -1,6 +1,6 @@
 var APP_CONFIG = require('../../config/app-config');
-var data = require( APP_CONFIG.DATA_PATH );
-var RESTMock = require('rest-mock').init(data);
+var data = require('../models/data.js').getInstance( APP_CONFIG.DATA_PATH );
+var RESTMock = require('rest-mock').init(data.get());
 var Q = require('q');
 var fs = require('fs');
 var path = require('path');
@@ -32,7 +32,7 @@ module.exports = function(servicePath, method, query){
     };
 
     this.exists = function(){
-        var existing = _.where(data.services, {
+        var existing = _.where(data.getServices(), {
             path: this.path
         });
 
@@ -63,7 +63,7 @@ module.exports = function(servicePath, method, query){
             return deferred.promise;
         }
 
-        data.services.push({
+        data.addService({
             id: this.id,
             name: this.name,
             mode: this.mode,
@@ -73,7 +73,8 @@ module.exports = function(servicePath, method, query){
         });
 
         try{
-            fs.writeFileSync( APP_CONFIG.DATA_PATH , JSON.stringify(data));
+            fs.writeFileSync( APP_CONFIG.DATA_PATH , JSON.stringify(data.get()));
+            RESTMock.updateData( data.get() );
             deferred.resolve(this);
         }catch(e){
             deferred.reject([

@@ -1,5 +1,5 @@
 var APP_CONFIG = require('../../config/app-config');
-var data = require( APP_CONFIG.DATA_PATH );
+var data = require('../models/data.js').getInstance( APP_CONFIG.DATA_PATH );
 
 var _ = require('underscore');
 
@@ -17,16 +17,14 @@ exports.getResponse = function(req, res){
 };
 
 exports.getServices = function(req, res){
-    data = require( APP_CONFIG.DATA_PATH );
     var serviceId = req.query.serviceId || undefined;
+    var services = _.map(data.getServices(), function(service){
 
-    var services = _.map(data.services, function(service){
         if( !serviceId || serviceId === service.id ){
             return _.pick(service, 'id', 'name', 'responses', 'params');
         }
         return null;
     });
-
     services = _.compact(services);
 
     var response;

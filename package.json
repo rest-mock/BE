@@ -11,7 +11,7 @@
     "mongoose": "~3.6.14",
     "q": "^1.0.1",
     "underscore": "^1.6.0",
-    "rest-mock": "https://github.com/rest-mock/rest-mock/tarball/0.1.5"
+    "rest-mock": "https://github.com/rest-mock/rest-mock/tarball/0.1.7"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

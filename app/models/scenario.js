@@ -1,8 +1,8 @@
 'use strict';
 
 var APP_CONFIG = require('../../config/app-config');
-var data = require( APP_CONFIG.DATA_PATH );
-var RESTMock = require('rest-mock').init(data);
+var data = require('../models/data.js').getInstance( APP_CONFIG.DATA_PATH );
+var RESTMock = require('rest-mock').init(data.get());
 var Q = require('q');
 var fs = require('fs');
 var path = require('path');
@@ -31,15 +31,15 @@ module.exports = function(params){
     this.save = function(){
         var deferred = Q.defer();
 
-        // var service = this.getService();
-
         var serviceIndex;
-        _.each(data.services, function(service, index){
+        _.each(data.getServices(), function(service, index){
             if( service.id === this.serviceId ){
                 serviceIndex = index;
             }
         }, this);
-        if( !data.services[serviceIndex] ){
+
+        var service = data.getServiceByIndex(serviceIndex);
+        if( !service ){
             deferred.reject([
                 {
                     error: 'Service ' + this.serviceId + ' could not be found.'
@@ -48,19 +48,22 @@ module.exports = function(params){
             return deferred.promise;
         }
 
-        if( !data.services[serviceIndex].responses[this.method] ){
-            data.services[serviceIndex].responses[this.method] = [];
+        if( !service.responses[this.method] ){
+            service.responses[this.method] = [];
         }
 
-        data.services[serviceIndex].responses[this.method].push({
+        service.responses[this.method].push({
             id: this.id,
             name: this.name,
             params: this.params,
             response: this.response
         });
 
+        data.updateService(serviceIndex, service);
+
         try{
             fs.writeFileSync( APP_CONFIG.DATA_PATH , JSON.stringify(data));
+            RESTMock.updateData( data.get() );
             deferred.resolve(this);
         }catch(e){
             deferred.reject([
