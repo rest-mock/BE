@@ -17,18 +17,32 @@ exports.getResponse = function(req, res){
 };
 
 exports.getServices = function(req, res){
+    data = require( APP_CONFIG.DATA_PATH );
     var serviceId = req.query.serviceId || undefined;
 
     var services = _.map(data.services, function(service){
         if( !serviceId || serviceId === service.id ){
             return _.pick(service, 'id', 'name', 'responses', 'params');
         }
-
         return null;
     });
 
     services = _.compact(services);
-    var response = ( services.length === 1 ) ? services[0] : services;
+
+    var response;
+    switch(services.length){
+        // This is a edge case. In a normal situation, this shouldn't happen, but in case we fail to find
+        // the service data, we return an empty object instead of an empty array as before.
+        case 0:
+            response = {};
+            break;
+        case 1: 
+            response = services[0];
+            break;
+        default:
+            response = services;
+            break;
+    }
 
     res.json( response );
 };
