@@ -62,7 +62,7 @@ module.exports = function(params){
         data.updateService(serviceIndex, service);
 
         try{
-            fs.writeFileSync( APP_CONFIG.DATA_PATH , JSON.stringify(data));
+            fs.writeFileSync( APP_CONFIG.DATA_PATH , JSON.stringify(data.get()));
             RESTMock.updateData( data.get() );
             deferred.resolve(this);
         }catch(e){

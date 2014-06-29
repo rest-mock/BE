@@ -21,7 +21,7 @@ exports.getServices = function(req, res){
     var services = _.map(data.getServices(), function(service){
 
         if( !serviceId || serviceId === service.id ){
-            return _.pick(service, 'id', 'name', 'responses', 'params');
+            return _.pick(service, 'id', 'name', 'path', 'mode', 'responses', 'params');
         }
         return null;
     });
